@@ -15,4 +15,10 @@ describe Pocket do
       expect(euros.inspect).to eq('#<Money 12.10 EUR>')
     end
   end
+
+  context 'when class methods are defined' do
+    it 'creates new instances' do
+      expect(Pocket::Money.from_eur(15).to_s).to eq('15.00 EUR')
+    end
+  end
 end
