@@ -1,11 +1,18 @@
 require 'spec_helper'
 
 describe Pocket do
-  it 'has a version number' do
-    expect(Pocket::VERSION).not_to be nil
-  end
+  let(:dollars) { Pocket::Money.new(10, 'USD') }
+  let(:euros) { Pocket::Money.new(12.1, 'EUR') }
 
-  it 'does something useful' do
-    expect(false).to eq(true)
+  context 'when money instance is created' do
+    it 'stringifies value' do
+      expect(dollars.to_s).to eq('10.00 USD')
+      expect(euros.to_s).to eq('12.10 EUR')
+    end
+
+    it 'inspects value' do
+      expect(dollars.inspect).to eq('#<Money 10.00 USD>')
+      expect(euros.inspect).to eq('#<Money 12.10 EUR>')
+    end
   end
 end
