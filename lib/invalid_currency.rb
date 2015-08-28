@@ -1,2 +1,3 @@
 class InvalidCurrency < StandardError
 end
+  

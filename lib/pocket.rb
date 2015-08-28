@@ -3,6 +3,8 @@ require 'exchange'
 
 module Pocket
   class Money
+    include Comparable
+
     attr_reader :value, :currency
 
     class << self
@@ -13,6 +15,11 @@ module Pocket
 
     def initialize(value, currency)
       @value, @currency, @exchange = value, currency.upcase, Exchange.new
+    end
+
+    def <=>(another_money)
+      value = @currency != another_money.currency ? exchange_to(another_money.currency) : @value
+      value <=> another_money.value
     end
 
     def to_s
