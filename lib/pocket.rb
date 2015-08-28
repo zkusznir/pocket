@@ -4,7 +4,7 @@ require 'exchange'
 module Pocket
   class Money
     attr_reader :value, :currency
-    
+
     class << self
       ['usd', 'eur', 'gbp'].each do |currency|
         define_method("from_#{currency}") { |value| Money.new(value, currency) }
@@ -26,5 +26,9 @@ module Pocket
     def exchange_to(currency)
       @exchange.convert(self, currency)
     end
+  end
+
+  def Pocket::Money(value, currency)
+    Money.new(value, currency)
   end
 end
