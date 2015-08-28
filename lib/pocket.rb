@@ -24,7 +24,7 @@ module Pocket
     end
 
     def exchange_to(currency)
-      @exchange.convert(self, currency)
+      @exchange.convert(self, currency.upcase)
     end
   end
 

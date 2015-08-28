@@ -1,4 +1,5 @@
 require 'rating'
+require 'invalid_currency'
 
 class Exchange
   def initialize
@@ -6,6 +7,7 @@ class Exchange
   end
 
   def convert(money, currency)
-    money.value * @rating.rates[money.currency][currency.upcase]
+    raise InvalidCurrency, "Invalid currency: #{currency}" if !@rating.rates.has_key?(currency)
+    money.value * @rating.rates[money.currency][currency]
   end
 end

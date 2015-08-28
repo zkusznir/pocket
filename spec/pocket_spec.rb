@@ -22,12 +22,6 @@ describe Pocket do
     end
   end
 
-  describe '#exchange_to' do
-    it 'converts currencies' do
-      expect(dollars.exchange_to('EUR')).to eq(10*0.890238)
-    end
-  end
-
   describe '.Money' do
     it 'creates new instance' do
       expect(Pocket::Money(5, 'USD').to_s).to eq('5.00 USD')
