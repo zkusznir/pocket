@@ -10,7 +10,7 @@ describe Pocket::Exchange do
     end
 
     it 'raises an exception when invalid currency is passed' do
-      expect { exchange.convert(dollars, 'CZK') }.to raise_error('Invalid currency: CZK')
+      expect { exchange.convert(dollars, 'CZK') }.to raise_error(Pocket::InvalidCurrency, /CZK/)
     end
   end
 end
