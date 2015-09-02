@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Exchange do
-  let(:exchange) { Exchange.new }
+describe Pocket::Exchange do
+  let(:exchange) { Pocket::Exchange.new }
   let(:dollars) { Pocket::Money(10, 'USD') }
 
   describe '#convert' do
