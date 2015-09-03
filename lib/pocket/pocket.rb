@@ -32,7 +32,7 @@ module Pocket
     end
 
     def <=>(another_money)
-      exchange_to(another_money.currency) <=> another_money.value
+      exchange_to(another_money.currency).value <=> another_money.value
     end
 
     def to_s
@@ -44,7 +44,7 @@ module Pocket
     end
 
     def exchange_to(currency)
-      @currency == currency ? @value : @exchange.convert(self, currency.upcase)
+      @currency == currency ? self : @exchange.convert(self, currency.upcase)
     end
   end
 

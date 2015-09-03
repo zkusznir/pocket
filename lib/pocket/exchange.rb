@@ -9,7 +9,7 @@ module Pocket
 
     def convert(money, currency)
       raise InvalidCurrency.new(currency) if !@rating.rates.has_key?(currency)
-      money.value * @rating.rates[money.currency][currency]
+      Money.new(money.value * @rating.rates[money.currency][currency], currency)
     end
   end
 end

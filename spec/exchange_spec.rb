@@ -6,7 +6,7 @@ describe Pocket::Exchange do
 
   describe '#convert' do
     it 'converts currencies' do
-      expect(exchange.convert(dollars, 'EUR')).to eq(10*0.890238)
+      expect(exchange.convert(dollars, 'EUR').to_s).to eq('8.90 EUR')
     end
 
     it 'raises an exception when invalid currency is passed' do
