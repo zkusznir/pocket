@@ -11,6 +11,10 @@ module Pocket
       ['usd', 'eur', 'gbp'].each do |currency|
         define_method("from_#{currency}") { |value| Money.new(value, currency) }
       end
+
+      def using_default_currency(currency, &block)
+        @default_currency = currency
+      end
     end
 
     def initialize(value, currency)
