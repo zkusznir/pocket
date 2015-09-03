@@ -52,4 +52,14 @@ describe Pocket do
       expect { Pocket::Money.new(100) }.to raise_error(Pocket::CurrencyMissing)
     end
   end
+
+  describe 'nested .using_default_currency block' do
+    it 'creates instances of different currencies' do
+      money = Pocket::Money.using_default_currency('USD') do
+        Pocket::Money.new(100)
+        Pocket::Money.using_default_currency('EUR') { Pocket::Money.new(55) }
+      end
+      expect(money.to_s).to eq('55.00 EUR')
+    end
+  end
 end
