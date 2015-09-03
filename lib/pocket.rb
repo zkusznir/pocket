@@ -5,15 +5,11 @@ module Pocket
   class Money
     include Comparable
 
-    attr_reader :value, :currency
+    attr_reader :value, :currency, :default_currency
 
     class << self
       ['usd', 'eur', 'gbp'].each do |currency|
         define_method("from_#{currency}") { |value| Money.new(value, currency) }
-      end
-
-      def using_default_currency(&block)
-
       end
     end
 
@@ -22,8 +18,7 @@ module Pocket
     end
 
     def <=>(another_money)
-      value = @currency != another_money.currency ? exchange_to(another_money.currency) : @value
-      value <=> another_money.value
+      exchange_to(another_money.currency) <=> another_money.value
     end
 
     def to_s
@@ -35,7 +30,7 @@ module Pocket
     end
 
     def exchange_to(currency)
-      @exchange.convert(self, currency.upcase)
+      @currency == currency ? @value : @exchange.convert(self, currency.upcase)
     end
   end
 
