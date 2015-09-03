@@ -38,4 +38,18 @@ describe Pocket do
       expect(euros < another_dollars).to be true
     end
   end
+
+  describe '.using_default_currency' do
+    it 'creates new instance of parameters currency' do
+      expect(Pocket::Money.using_default_currency('USD') { Pocket::Money(100) }.to_s)
+        .to eq('100.00 USD')
+      expect(Pocket::Money.using_default_currency('USD') { Pocket::Money.new(100) }.to_s)
+        .to eq('100.00 USD')
+    end
+
+    it 'does not create new instanced when no default currency set' do
+      expect { Pocket::Money(100) }.to raise_error(Pocket::CurrencyMissing)
+      expect { Pocket::Money.new(100) }.to raise_error(Pocket::CurrencyMissing)
+    end
+  end
 end

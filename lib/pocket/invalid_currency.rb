@@ -5,4 +5,11 @@ module Pocket
       super("Invalid currency: #{message}")
     end
   end
+
+  class CurrencyMissing < StandardError
+
+    def initialize
+      super('No currency specified')
+    end
+  end
 end

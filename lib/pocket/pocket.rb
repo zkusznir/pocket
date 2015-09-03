@@ -1,23 +1,33 @@
-require "pocket/version"
-require 'exchange'
+require './lib/pocket/version'
+require './lib/pocket/exchange'
 
 module Pocket
   class Money
     include Comparable
+    @@default_currency = nil
 
-    attr_reader :value, :currency, :default_currency
+    attr_reader :value, :currency
 
     class << self
       ['usd', 'eur', 'gbp'].each do |currency|
         define_method("from_#{currency}") { |value| Money.new(value, currency) }
       end
 
+      def default_currency
+        @@default_currency
+      end
+
       def using_default_currency(currency, &block)
-        @default_currency = currency
+        @@default_currency = currency
+        result = yield
+        @@default_currency = nil
+        result
       end
     end
 
-    def initialize(value, currency)
+    def initialize(value, currency = nil)
+      raise CurrencyMissing if Money.default_currency.nil? && currency.nil?
+      currency = Money.default_currency if currency.nil?
       @value, @currency, @exchange = value, currency.upcase, Exchange.new
     end
 
@@ -38,7 +48,8 @@ module Pocket
     end
   end
 
-  def Pocket::Money(value, currency)
+  def Pocket::Money(value, *currency)
+    currency = currency.empty? ? nil : currency.first
     Money.new(value, currency)
   end
 end

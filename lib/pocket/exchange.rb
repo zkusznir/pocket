@@ -1,5 +1,5 @@
-require 'rating'
-require 'invalid_currency'
+require './lib/pocket/rating'
+require './lib/pocket/invalid_currency'
 
 module Pocket
   class Exchange
