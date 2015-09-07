@@ -4,7 +4,7 @@ require './lib/pocket/exchange'
 module Pocket
   class Money
     include Comparable
-    @@default_currency = nil
+    @@default_currency, @@outer_currency = nil, nil
 
     attr_reader :value, :currency
 
@@ -18,9 +18,11 @@ module Pocket
       end
 
       def using_default_currency(currency, &block)
+        @@outer_currency = @@default_currency
         @@default_currency = currency
         result = yield
-        @@default_currency = nil
+      ensure
+        @@default_currency = @@outer_currency.nil? ? nil : @@outer_currency
         result
       end
     end

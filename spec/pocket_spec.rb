@@ -56,6 +56,26 @@ describe Pocket do
       expect(Pocket::Money.using_default_currency('USD') { Pocket::Money.new(55, 'EUR') }.to_s)
         .to eq('55.00 EUR')
     end
+
+    it 'ensures default currency is nullified after the block execution' do
+      begin
+        Money.using_default_currency('USD') do
+          raise 'an_error'
+        end
+      rescue
+      end
+      expect { Pocket::Money.new(100) }.to raise_error(Pocket::CurrencyMissing)
+    end
+
+    it 'keeps the proper currency within each block' do
+      Pocket::Money.using_default_currency('USD') do
+        expect(Pocket::Money.new(100).to_s).to eq('100.00 USD')
+        Pocket::Money.using_default_currency('EUR') do
+          expect(Pocket::Money.new(55).to_s).to eq('55.00 EUR')
+        end
+        expect(Pocket::Money.new(100).to_s).to eq('100.00 USD')
+      end
+    end
   end
 
   describe 'nested .using_default_currency block' do
