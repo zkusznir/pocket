@@ -5,6 +5,7 @@ module Pocket
   class Money
     include Comparable
     @@default_currency, @@outer_currency = nil, []
+    @@available_rates = Rating.new.rates
 
     attr_reader :value, :currency
 
@@ -46,6 +47,20 @@ module Pocket
 
     def exchange_to(currency)
       @currency == currency ? self : @exchange.convert(self, currency.upcase)
+    end
+
+    def method_missing(method_name, *args, &block)
+      if method_name.to_s.start_with?('to')
+        currency = method_name.to_s.split('_').last.upcase
+        raise NoMethodError unless @@available_rates.has_key?(currency)
+        exchange_to(currency)
+      else
+        super
+      end
+    end
+
+    def respond_to_missing?(method_name, include_private = true)
+      method_name.to_s.start_with?('to_') || super
     end
   end
 

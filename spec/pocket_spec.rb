@@ -90,4 +90,18 @@ describe Pocket do
       expect(money.to_s).to eq('55.00 EUR')
     end
   end
+
+  describe '.to_currency' do
+    it 'converts currency' do
+      expect(dollars.to_eur.to_s).to eq('8.90 EUR')
+    end
+
+    it 'makes money instance respond to valid conversions methods' do
+      expect(dollars.respond_to?(:to_eur)).to be true
+    end
+
+    it 'does not convert to invalid currency' do
+      expect { dollars.to_czk }.to raise_error(NoMethodError)
+    end
+  end
 end
