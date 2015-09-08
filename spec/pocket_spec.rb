@@ -59,7 +59,7 @@ describe Pocket do
 
     it 'ensures default currency is nullified after the block execution' do
       begin
-        Money.using_default_currency('USD') do
+        Pocket::Money.using_default_currency('USD') do
           raise 'an_error'
         end
       rescue
@@ -72,6 +72,9 @@ describe Pocket do
         expect(Pocket::Money.new(100).to_s).to eq('100.00 USD')
         Pocket::Money.using_default_currency('EUR') do
           expect(Pocket::Money.new(55).to_s).to eq('55.00 EUR')
+          Pocket::Money.using_default_currency('PLN') do
+            expect(Pocket::Money.new(2).to_s).to eq('2.00 PLN')
+          end
         end
         expect(Pocket::Money.new(100).to_s).to eq('100.00 USD')
       end
