@@ -3,6 +3,8 @@ require_relative './invalid_currency'
 
 module Pocket
   class Exchange
+    attr_reader :rating
+
     def initialize
       @rating = Rating.new
     end
