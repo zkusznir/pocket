@@ -1,5 +1,6 @@
 require './lib/pocket/version'
 require './lib/pocket/exchange'
+require 'bigdecimal'
 
 module Pocket
   class Money
@@ -29,7 +30,7 @@ module Pocket
     def initialize(value, currency = nil)
       raise CurrencyMissing if Money.default_currency.nil? && currency.nil?
       currency = Money.default_currency if currency.nil?
-      @value, @currency = value, currency.upcase
+      @value, @currency = BigDecimal.new(value.to_s, 2), currency.upcase
     end
 
     def <=>(another_money)
