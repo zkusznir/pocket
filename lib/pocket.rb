@@ -1,11 +1,13 @@
 require './lib/pocket/version'
 require './lib/pocket/exchange'
+require './lib/pocket/hash_exchange'
+require './lib/pocket/api_exchange'
 require 'bigdecimal'
 
 module Pocket
   class Money
     include Comparable
-    @@default_currency, @@exchange = nil, Exchange.new
+    @@default_currency, @@exchange = nil, HashExchange.new
 
     attr_reader :value, :currency
 
@@ -27,9 +29,8 @@ module Pocket
       end
     end
 
-    def initialize(value, currency = nil)
-      raise CurrencyMissing if Money.default_currency.nil? && currency.nil?
-      currency = Money.default_currency if currency.nil?
+    def initialize(value, currency = Money.default_currency)
+      raise CurrencyMissing if currency.nil?
       @value, @currency = BigDecimal.new(value.to_s, 2), currency.upcase
     end
 
@@ -52,7 +53,7 @@ module Pocket
     def method_missing(method_name, *args, &block)
       if method_name.to_s.start_with?('to_')
         currency = method_name.to_s.split('_').last.upcase
-        super unless @@exchange.rating.rates.has_key?(currency)
+        super unless @@exchange.valid_currency?(currency)
         exchange_to(currency)
       else
         super
@@ -64,8 +65,7 @@ module Pocket
     end
   end
 
-  def Pocket::Money(value, *currency)
-    currency = currency.empty? ? nil : currency.first
-    Money.new(value, currency)
+  def Pocket::Money(*args)
+    Money.new(*args)
   end
 end
