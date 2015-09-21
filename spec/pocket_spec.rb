@@ -82,7 +82,7 @@ describe Pocket do
   end
 
   describe 'nested .using_default_currency block' do
-    it 'creates instances of different currencies' do
+    it 'creates instances of different currency' do
       money = Pocket::Money.using_default_currency('USD') do
         Pocket::Money.new(100)
         Pocket::Money.using_default_currency('EUR') { Pocket::Money.new(55) }
@@ -102,6 +102,23 @@ describe Pocket do
 
     it 'does not convert to invalid currency' do
       expect { dollars.to_czk }.to raise_error(NoMethodError)
+    end
+  end
+
+  describe '#arithmetic_operators' do
+    it 'adds and subtracts money instances of the same currency' do
+      expect((dollars + another_dollars).to_s).to eq('60.00 USD')
+      expect((another_dollars - dollars).to_s).to eq('40.00 USD')
+    end
+
+    it 'adds and subtracts money instances of different currency' do
+      expect((dollars + euros).to_s).to eq('23.60 USD')
+      expect((euros - dollars).to_s).to eq('3.20 EUR')
+    end
+
+    it 'multiplies and divides money' do
+      expect((dollars * 5).to_s).to eq('50.00 USD')
+      expect((dollars / 2.5).to_s).to eq('4.00 USD')
     end
   end
 end

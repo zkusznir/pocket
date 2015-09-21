@@ -34,6 +34,20 @@ module Pocket
       @value, @currency = BigDecimal.new(value.to_s, 2), currency.upcase
     end
 
+    ['+', '-'].each do |op|
+      define_method(op) do |money|
+        value = eval "#{@value} #{op} #{money.exchange_to(@currency).value}"
+        Money.new(value, @currency)
+      end
+    end
+
+    ['/', '*'].each do |op|
+      define_method(op) do |number|
+        value = eval "#{@value} #{op} #{number}"
+        Money.new(value, @currency)
+      end
+    end
+
     def <=>(another_money)
       exchange_to(another_money.currency).value <=> another_money.value
     end
