@@ -36,16 +36,20 @@ module Pocket
 
     ['+', '-'].each do |op|
       define_method(op) do |money|
-        value = eval "#{@value} #{op} #{money.exchange_to(@currency).value}"
+        value = @value.send(op.to_sym, money.exchange_to(@currency).value)
         Money.new(value, @currency)
       end
     end
 
     ['/', '*'].each do |op|
       define_method(op) do |number|
-        value = eval "#{@value} #{op} #{number}"
+        value = @value.send(op.to_sym, number)
         Money.new(value, @currency)
       end
+    end
+
+    def coerce(other)
+      [self, other]
     end
 
     def <=>(another_money)

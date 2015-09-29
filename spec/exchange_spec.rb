@@ -3,6 +3,7 @@ require 'webmock/rspec'
 
 describe Pocket::Exchange do
   let(:dollars) { Pocket::Money(10, 'USD') }
+  let(:euros) { Pocket::Money(5, 'EUR') }
 
   context 'when hash exchange is used' do
     let(:exchange) { Pocket::HashExchange.new }
@@ -36,6 +37,7 @@ describe Pocket::Exchange do
           }
         }), :status => 200)
       expect(exchange.convert(dollars, 'EUR').to_s).to eq('8.80 EUR')
+      expect(exchange.convert(euros, 'CHF').to_s).to eq('5.46 CHF')
     end
   end
 end

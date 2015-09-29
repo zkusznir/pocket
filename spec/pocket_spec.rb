@@ -120,5 +120,9 @@ describe Pocket do
       expect((dollars * 5).to_s).to eq('50.00 USD')
       expect((dollars / 2.5).to_s).to eq('4.00 USD')
     end
+
+    it 'allows for reverse order in multiplication only' do
+      expect((2 * dollars).to_s).to eq('20.00 USD')
+    end
   end
 end
