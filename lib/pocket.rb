@@ -49,7 +49,11 @@ module Pocket
     end
 
     def coerce(other)
-      [self, other]
+      object = self.dup
+      def object./(other)
+        raise 'Invalid division operators order'
+      end
+      [object, other]
     end
 
     def <=>(another_money)

@@ -123,6 +123,7 @@ describe Pocket do
 
     it 'allows for reverse order in multiplication only' do
       expect((2 * dollars).to_s).to eq('20.00 USD')
+      expect { 2 / dollars }.to raise_error
     end
   end
 end
